@@ -1,37 +1,41 @@
 import json
 import numpy as np
 
-from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
+catalog = []
 
 with open("catalog.json", "r") as f:
     catalog = json.load(f)
 
-texts = []
 
-for item in catalog:
+def fake_embedding(text):
 
-    text = f"""
-    {item['name']}
-    {item['description']}
-    {item['test_type']}
-    """
-
-    texts.append(text)
-
-embeddings = model.encode(texts)
+    return np.random.rand(384)
 
 
 def retrieve_assessments(query, top_k=5):
 
-    query_embedding = model.encode([query])
+    query_embedding = fake_embedding(query)
 
-    similarities = cosine_similarity(
-        query_embedding,
-        embeddings,
-    )[0]
+    similarities = []
+
+    for item in catalog:
+
+        text = f"""
+        {item['name']}
+        {item['description']}
+        {item['test_type']}
+        """
+
+        item_embedding = fake_embedding(text)
+
+        similarity = cosine_similarity(
+            [query_embedding],
+            [item_embedding],
+        )[0][0]
+
+        similarities.append(similarity)
 
     top_indices = np.argsort(similarities)[::-1][:top_k]
 
