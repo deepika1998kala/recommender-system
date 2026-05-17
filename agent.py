@@ -4,7 +4,11 @@ import google.generativeai as genai
 from retriever import retrieve_assessments
 from prompts import SYSTEM_PROMPT
 
-GOOGLE_API_KEY = "YOUR_GEMINI_API_KEY"
+from dotenv import load_dotenv
+
+load_dotenv()
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
 genai.configure(api_key=GOOGLE_API_KEY)
