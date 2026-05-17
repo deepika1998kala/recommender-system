@@ -16,9 +16,18 @@ class ChatRequest(BaseModel):
     messages: List[Message]
 
 
+@app.get("/")
+def home():
+    return {
+        "message": "SHL Conversational Recommender API Running"
+    }
+
+
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {
+        "status": "ok"
+    }
 
 
 @app.post("/chat")
